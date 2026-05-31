@@ -7,7 +7,7 @@ All personal paths, API keys, account identifiers, and raw log output have been 
 
 ## Validation Date
 
-2025-05-31
+2026-05-31
 
 ---
 
@@ -24,9 +24,15 @@ All personal paths, API keys, account identifiers, and raw log output have been 
 
 ## Validation Method
 
-- Level 1: `/v1/models` catalog confirmed all four models present
+- Level 1: `/v1/models` catalog confirmed expected models present
 - Level 2: Exact-response prompts (`DEEPSEEK_V4_PRO_OK_71`, `DEEPSEEK_REASONER_OK_71`, `GEMINI_25_PRO_OK_71`) returned exact expected strings
 - Gemini 2.5 Pro initially returned 429 RESOURCE_EXHAUSTED; resolved after enabling billing on the associated Google Cloud project
+
+Validated final model outcomes:
+- `deepseek-v4-pro` PASS
+- `deepseek-reasoner` PASS
+- `gemini-2.5-pro` PASS after billing enabled
+- `gemini-2.5-flash` configured fallback
 
 ---
 

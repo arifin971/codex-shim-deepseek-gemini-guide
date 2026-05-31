@@ -81,6 +81,45 @@ Set the shim profile as the default profile in Codex configuration, or re-select
 
 ---
 
+## Main app suddenly shows Codex Shim Local
+
+**Symptom:** Your main Codex app/profile unexpectedly points to shim instead of native OpenAI/Codex.
+
+**Likely cause:** Main profile config was overwritten with shim provider settings.
+
+**Fix:**
+1. Restore the main config backup you saved before shim changes
+2. Confirm main profile/provider is set back to native OpenAI/Codex
+3. Keep shim provider settings in backup app/profile only
+
+---
+
+## Backup app shows empty chat history
+
+**Symptom:** Backup app/profile opens with missing or empty chats.
+
+**Likely cause:** App-user-data or chat databases were removed, replaced, or a duplicate window/profile was used.
+
+**Fix:**
+1. Do not delete app-user-data folders during profile changes
+2. Preserve chat databases before edits
+3. If duplicate windows are open, identify the correct profile first, then close only the duplicate window
+
+---
+
+## Desktop picker only shows native GPT models
+
+**Symptom:** Shim models do not appear in desktop picker, but native GPT models do.
+
+**Likely cause:** Desktop config or model catalog was not loaded for the shim profile.
+
+**Check:**
+1. Verify custom provider config is applied to the intended profile
+2. Verify `model_catalog_json` is present and points to the expected model catalog
+3. Restart the backup app/profile and re-open the picker
+
+---
+
 ## Port 4100 already in use
 
 **Symptom:** Shim fails to start with "address already in use" or similar error.

@@ -6,7 +6,7 @@ This document explains the stack decisions: what was tried, what failed, and why
 
 ## Operational Model
 
-### Primary Path: Native Codex
+### Main App/Profile: Native Codex
 
 When native Codex quota is available, use it directly. No shim needed.
 
@@ -14,15 +14,26 @@ When native Codex quota is available, use it directly. No shim needed.
 User --> Codex App/CLI --> OpenAI Responses API
 ```
 
-### Fallback Path: Codex via Local Shim
+### Backup App/Profile: Codex via Local Shim
 
-When native Codex quota is exhausted or you want to use DeepSeek/Gemini:
+Use a separate backup app/profile when native Codex quota is exhausted or you want to use DeepSeek/Gemini:
 
 ```
 User --> Codex App/CLI --> 127.0.0.1:4100/v1 --> codex-shim --> DeepSeek / Gemini
 ```
 
-The switch is a profile change in Codex — no code changes required.
+The switch should happen in the backup app/profile only. Keep the main app/profile native.
+
+### Two-App/Profile Pattern
+
+Recommended production setup:
+
+- Main Codex app/profile -> Native OpenAI/Codex
+- Backup Codex app/profile -> Codex Shim Local -> `127.0.0.1:4100/v1` -> DeepSeek/Gemini
+
+Important: CLI/exec validation alone is not equal to Desktop GUI validation. Successful command-line calls prove transport and provider routing, but do not prove the desktop model picker/provider wiring.
+
+Desktop picker visibility may require `model_catalog_json` in addition to custom provider configuration.
 
 ---
 
