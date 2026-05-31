@@ -1,0 +1,22 @@
+# Codex profile: shim-routed DeepSeek / Gemini
+# Copy this file and fill in CODEX_SHIM_API_KEY with any local bearer string.
+# This key is local-only. It is NOT a real API key.
+# Example value: local-shim-key-01
+#
+# Do NOT set this to a real DeepSeek or Gemini key.
+# Real API keys go in environment variables: DEEPSEEK_API_KEY and GEMINI_API_KEY.
+
+model = "deepseek-v4-pro"
+model_provider = "codex_shim_local"
+
+[model_providers.codex_shim_local]
+name    = "Codex Shim Local"
+base_url = "http://127.0.0.1:4100/v1"
+env_key  = "CODEX_SHIM_API_KEY"
+wire_api = "responses"
+
+# To use this profile:
+# 1. Copy to your Codex config directory
+# 2. Set CODEX_SHIM_API_KEY in your environment (any local string)
+# 3. Start the shim: scripts\windows\start-codex-shim.ps1
+# 4. Select this profile in Codex
