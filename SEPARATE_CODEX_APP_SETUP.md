@@ -92,3 +92,19 @@ See `docs/ULTRASONIC_WORKING_GUI_REFERENCE.md` for the verified process listing,
 launcher, config structure, and the explanation of why the Store-app approach
 fails.
 
+
+---
+
+## Update — Patched app-bin Required (Separate Identity)
+
+A fresh Store/AppX copy gives PROFILE isolation only; its packed resources\app.asar
+does not read the backup AppUserModelID env var, so the taskbar identity is not
+separated. TRUE separate identity requires the PATCHED app-bin (unpacked
+resources\app) transferred from the working machine.
+
+- The GitHub repo stores scripts and docs only.
+- The patched app-bin is a LOCAL transfer artifact and is NEVER committed.
+- install-backup-codex-gui.ps1 now REQUIRES -PatchedAppBinSource and refuses a
+  WindowsApps/Store source for separate-identity mode.
+
+See docs/ULTRASONIC_WORKING_GUI_REFERENCE.md and docs/ARIFI_INSTALL_FROM_ULTRASONIC.md.

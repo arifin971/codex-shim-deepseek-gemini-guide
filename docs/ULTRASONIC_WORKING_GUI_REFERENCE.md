@@ -113,3 +113,57 @@ The `app-bin\` folder is a standard Electron application directory (Codex.exe,
 resources\, locales\, *.dll, *.pak, *.bin). It is machine-portable and does NOT
 depend on Store/AppX registration. Therefore this mechanism can be reproduced on
 any Windows machine that has the Codex app installed (to copy from).
+
+
+---
+
+## CRITICAL UPDATE — Patched app-bin Required for Separate Identity
+
+Field testing on a second machine proved an important distinction:
+
+### Fresh Store copy = profile isolation ONLY (not visual identity)
+
+Copying the installed Store/AppX Codex app into `<BackupHome>\app-bin` produces a
+PACKED `resources\app.asar`. That packed build:
+- DOES read `CODEX_ELECTRON_USER_DATA_PATH` -> user-data/profile isolation works.
+- DOES contain the Electron `setAppUserModelId` API.
+- DOES NOT contain `CODEX_BACKUP_APP_USER_MODEL_ID` or `com.openai.codex.backup`.
+
+Result: the backup app launches and is profile-isolated, but its renderer launches
+WITHOUT `--app-user-model-id=com.openai.codex.backup`, so it MERGES with the native
+blue Codex in the taskbar. This is a HOLD state, not a separate identity.
+
+### Patched app-bin = true separate identity
+
+The verified working machine runs a PATCHED app-bin where:
+- `resources\app` is UNPACKED (a folder, not app.asar).
+- The app code reads `CODEX_BACKUP_APP_USER_MODEL_ID` and calls
+  `setAppUserModelId('com.openai.codex.backup')`.
+- The renderer therefore launches with:
+  `--app-user-model-id=com.openai.codex.backup`
+  `--app-path=<BackupHome>\app-bin\resources\app`
+
+This patched app-bin is the PROVEN artifact. It is produced once on the working
+machine and transferred locally to other machines.
+
+### Repo policy
+
+- The GitHub repo stores SCRIPTS and DOCS only.
+- The patched `app-bin` (binaries) is a LOCAL TRANSFER ARTIFACT and is NEVER
+  committed to GitHub.
+- `install-backup-codex-gui.ps1` now REQUIRES `-PatchedAppBinSource` and refuses a
+  WindowsApps/Store source for separate-identity mode.
+
+### Creating the transfer artifact (on the working machine)
+
+```powershell
+$src = "$env:USERPROFILE\.backup.codex\app-bin"
+$dst = "$env:USERPROFILE\backup-codex-patched-appbin-transfer\app-bin"
+New-Item -ItemType Directory -Force -Path $dst | Out-Null
+# Copy ONLY app-bin. Never include auth.json/.env/config.toml/app-user-data/logs/DBs.
+robocopy $src $dst /MIR /XF auth.json .env config.toml /XD app-user-data logs sessions sqlite memories
+```
+
+Then transfer that folder to the target machine and pass its path as
+`-PatchedAppBinSource`.
+
