@@ -49,3 +49,46 @@ Backup Codex App/Profile
 - Restore backup profile config from `.bak`.
 - Do not delete chat databases.
 - Do not reset app-user-data.
+
+
+---
+
+## Separate GUI App Identity (Verified Mechanism)
+
+The setup above isolates the PROFILE. To also make the Backup Codex a visually
+separate DESKTOP APP (its own taskbar icon, not merged with the blue native
+Codex), use a COPIED app binary with a distinct AppUserModelID.
+
+### Why this is required
+
+Launching the packaged Store Codex app always runs the single registered blue
+identity, regardless of CODEX_HOME or environment variables. A separate desktop
+identity requires running a COPIED `Codex.exe` with `--app-user-model-id`.
+
+### Install (Windows)
+
+```powershell
+# Copies the installed Codex app into .backup.codex\app-bin and wires a launcher
+.\scripts\windows\install-backup-codex-gui.ps1 `
+    -BackupHome "$env:USERPROFILE\.backup.codex" `
+    -AppUserModelId "com.openai.codex.backup" `
+    -AppName "Codex Backup" `
+    -IconPath "$env:USERPROFILE\.backup.codex\backup_codex_black.ico"
+```
+
+### Verify
+
+```powershell
+.\scripts\windows\verify-backup-codex-gui.ps1
+```
+
+Expected: all checks PASS — app-bin copied app exists, running process uses
+app-bin\Codex.exe, renderer carries `--app-user-model-id=com.openai.codex.backup`,
+backup config points at `http://127.0.0.1:4100/v1`, shim healthy, native untouched.
+
+### Full reference
+
+See `docs/ULTRASONIC_WORKING_GUI_REFERENCE.md` for the verified process listing,
+launcher, config structure, and the explanation of why the Store-app approach
+fails.
+
