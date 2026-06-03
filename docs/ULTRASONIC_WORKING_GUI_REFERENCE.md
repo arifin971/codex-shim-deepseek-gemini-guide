@@ -1,4 +1,4 @@
-# Ultrasonic Working GUI Reference (Verified Source of Truth)
+﻿# Ultrasonic Working GUI Reference (Verified Source of Truth)
 
 This documents the EXACT mechanism by which a separate "Codex Backup" GUI app
 runs alongside native Codex on a working machine, verified by live process
@@ -117,7 +117,7 @@ any Windows machine that has the Codex app installed (to copy from).
 
 ---
 
-## CRITICAL UPDATE — Patched app-bin Required for Separate Identity
+## CRITICAL UPDATE â€” Patched app-bin Required for Separate Identity
 
 Field testing on a second machine proved an important distinction:
 
@@ -166,4 +166,6 @@ robocopy $src $dst /MIR /XF auth.json .env config.toml /XD app-user-data logs se
 
 Then transfer that folder to the target machine and pass its path as
 `-PatchedAppBinSource`.
+
+See also docs/PATCHED_APPBIN_TRANSFER_GUIDE.md for the complete transfer workflow, secret scan, and installer command.
 

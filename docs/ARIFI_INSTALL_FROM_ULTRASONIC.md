@@ -1,4 +1,4 @@
-# ARIFI Install Instructions — Patched Backup Codex GUI (Identity-Separated)
+﻿# ARIFI Install Instructions â€” Patched Backup Codex GUI (Identity-Separated)
 
 Reproduces the verified working mechanism on arifi using the PATCHED app-bin
 transferred from the working machine. A fresh Store copy is NOT sufficient for a
@@ -10,7 +10,7 @@ Paths on arifi:
 - Shim folder    : C:\Users\arifi\.codex-shim-local
 - Shim endpoint  : http://127.0.0.1:4100/v1
 
-## Step 0 — Obtain the patched app-bin transfer artifact
+## Step 0 â€” Obtain the patched app-bin transfer artifact
 On the working machine, create the sanitized artifact (app-bin only, no secrets):
 ```powershell
 $src = "$env:USERPROFILE\.backup.codex\app-bin"
@@ -21,14 +21,14 @@ robocopy $src $dst /MIR /XF auth.json .env config.toml /XD app-user-data logs se
 Copy that `backup-codex-patched-appbin-transfer\app-bin` folder to arifi, e.g.:
   C:\Users\arifi\backup-codex-patched-appbin-transfer\app-bin
 
-## Step 1 — Ensure the local shim is running
+## Step 1 â€” Ensure the local shim is running
 ```powershell
 C:\Users\arifi\.codex-shim-local\start-shim.ps1
 curl http://127.0.0.1:4100/health
 curl http://127.0.0.1:4100/v1/models
 ```
 
-## Step 2 — Install using the PATCHED app-bin source
+## Step 2 â€” Install using the PATCHED app-bin source
 ```powershell
 cd <repo>\scripts\windows
 .\install-backup-codex-gui.ps1 `
@@ -41,7 +41,7 @@ cd <repo>\scripts\windows
 The installer HOLDS if the source is missing, lacks `resources\app`, or points at
 WindowsApps/Store.
 
-## Step 3 — Confirm backup config points at the shim
+## Step 3 â€” Confirm backup config points at the shim
 `C:\Users\arifi\.backup.codex\config.toml`:
 ```toml
 model_provider = "codex_shim_local"
@@ -52,11 +52,11 @@ wire_api = "responses"
 ```
 No ai.gptclaudegemini.xyz. No gpt-5.3-codex.
 
-## Step 4 — Launch
+## Step 4 â€” Launch
 Double-click "Codex Backup". Runs C:\Users\arifi\.backup.codex\app-bin\Codex.exe
 with a separate identity.
 
-## Step 5 — Verify
+## Step 5 â€” Verify
 ```powershell
 cd <repo>\scripts\windows
 .\verify-backup-codex-gui.ps1 -BackupHome "C:\Users\arifi\.backup.codex" -NativeHome "C:\Users\arifi\.codex"
@@ -72,6 +72,9 @@ PASS requires renderer flags: --app-user-model-id=com.openai.codex.backup,
 
 ## Why the earlier arifi attempt was HOLD
 The earlier install copied a fresh Store app (packed app.asar). That gives profile
-isolation only — the packed build does not read the backup AUMID env var, so the
+isolation only â€” the packed build does not read the backup AUMID env var, so the
 taskbar identity merged with native Codex. The fix is to install from the PATCHED
 app-bin (unpacked resources\app), which is what this updated installer requires.
+
+See docs/PATCHED_APPBIN_TRANSFER_GUIDE.md for the complete packaging, sanitization, and transfer workflow.
+

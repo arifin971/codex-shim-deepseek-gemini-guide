@@ -1,4 +1,4 @@
-# Separate Codex App/Profile Setup
+﻿# Separate Codex App/Profile Setup
 
 Use a separate backup Codex app/profile so your main native Codex workflow stays stable while shim routing is available as fallback.
 
@@ -82,7 +82,7 @@ identity requires running a COPIED `Codex.exe` with `--app-user-model-id`.
 .\scripts\windows\verify-backup-codex-gui.ps1
 ```
 
-Expected: all checks PASS — app-bin copied app exists, running process uses
+Expected: all checks PASS â€” app-bin copied app exists, running process uses
 app-bin\Codex.exe, renderer carries `--app-user-model-id=com.openai.codex.backup`,
 backup config points at `http://127.0.0.1:4100/v1`, shim healthy, native untouched.
 
@@ -95,7 +95,7 @@ fails.
 
 ---
 
-## Update — Patched app-bin Required (Separate Identity)
+## Update â€” Patched app-bin Required (Separate Identity)
 
 A fresh Store/AppX copy gives PROFILE isolation only; its packed resources\app.asar
 does not read the backup AppUserModelID env var, so the taskbar identity is not
@@ -107,4 +107,5 @@ resources\app) transferred from the working machine.
 - install-backup-codex-gui.ps1 now REQUIRES -PatchedAppBinSource and refuses a
   WindowsApps/Store source for separate-identity mode.
 
-See docs/ULTRASONIC_WORKING_GUI_REFERENCE.md and docs/ARIFI_INSTALL_FROM_ULTRASONIC.md.
+See docs/ULTRASONIC_WORKING_GUI_REFERENCE.md, docs/ARIFI_INSTALL_FROM_ULTRASONIC.md, and docs/PATCHED_APPBIN_TRANSFER_GUIDE.md.
+
