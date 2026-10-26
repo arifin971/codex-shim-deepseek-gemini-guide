@@ -38,7 +38,7 @@ if (-not $proc) {
 
 # Safety check: only stop if it is a Python process
 if ($proc.ProcessName -notmatch 'python') {
-    Write-Error "PID $pid is '$($proc.ProcessName)' — not a Python process. Aborting to avoid killing unrelated process."
+    Write-Error "PID $pid is '$($proc.ProcessName)' - not a Python process. Aborting to avoid killing unrelated process."
     exit 1
 }
 
