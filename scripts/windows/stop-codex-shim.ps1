@@ -22,26 +22,26 @@ if (-not $netstatLine) {
 }
 
 $parts = $netstatLine.ToString().Trim() -split '\s+'
-$pid   = $parts[-1]
+$shimPid   = $parts[-1]
 
-if (-not ($pid -match '^\d+$')) {
+if (-not ($shimPid -match '^\d+$')) {
     Write-Error "Could not parse PID from netstat output: $netstatLine"
     exit 1
 }
 
-$proc = Get-Process -Id $pid -ErrorAction SilentlyContinue
+$proc = Get-Process -Id $shimPid -ErrorAction SilentlyContinue
 
 if (-not $proc) {
-    Write-Host "[codex-shim] PID $pid not found. May have already stopped." -ForegroundColor Yellow
+    Write-Host "[codex-shim] PID $shimPid not found. May have already stopped." -ForegroundColor Yellow
     exit 0
 }
 
 # Safety check: only stop if it is a Python process
 if ($proc.ProcessName -notmatch 'python') {
-    Write-Error "PID $pid is '$($proc.ProcessName)' — not a Python process. Aborting to avoid killing unrelated process."
+    Write-Error "PID $shimPid is '$($proc.ProcessName)' - not a Python process. Aborting to avoid killing unrelated process."
     exit 1
 }
 
-Write-Host "[codex-shim] Stopping PID $pid ($($proc.ProcessName)) on port $Port..." -ForegroundColor Cyan
-Stop-Process -Id $pid -Force
+Write-Host "[codex-shim] Stopping PID $shimPid ($($proc.ProcessName)) on port $Port..." -ForegroundColor Cyan
+Stop-Process -Id $shimPid -Force
 Write-Host "[codex-shim] Stopped." -ForegroundColor Green

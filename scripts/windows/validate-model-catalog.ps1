@@ -44,7 +44,7 @@ foreach ($required in $RequiredModels) {
     if ($availableIds -contains $required) {
         Write-Host "[PASS] $required" -ForegroundColor Green
     } else {
-        Write-Host "[FAIL] $required — NOT FOUND in catalog" -ForegroundColor Red
+        Write-Host "[FAIL] $required - NOT FOUND in catalog" -ForegroundColor Red
         $allPass = $false
     }
 }
